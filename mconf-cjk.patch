@@ -1,13 +1,39 @@
-From 95e50c49d946358c01bac2ea04fb591858b864d4 Mon Sep 17 00:00:00 2001
+From 14728f7e54ba68e3aeec5fc0235d284af2cf7815 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?=E9=99=88=E7=94=9F=E6=9D=82=E7=89=A9=E6=88=BF?=
  <88823709+TC999@users.noreply.github.com>
-Date: Tue, 11 Feb 2025 17:01:53 +0800
-Subject: [PATCH 1/4] Update mconf.c
+Date: Sun, 23 Mar 2025 03:20:36 +0000
+Subject: [PATCH] =?UTF-8?q?=E5=86=85=E6=A0=B8=E9=85=8D=E7=BD=AE=E7=95=8C?=
+ =?UTF-8?q?=E9=9D=A2=E4=B8=AD=E6=96=87=E8=A1=A5=E4=B8=81?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
 ---
- scripts/kconfig/mconf.c | 352 ++++++++++++++++------------------------
- 1 file changed, 144 insertions(+), 208 deletions(-)
+ scripts/kconfig/lxdialog/menubox.c |  10 +-
+ scripts/kconfig/mconf.c            | 352 ++++++++++++-----------------
+ 2 files changed, 149 insertions(+), 213 deletions(-)
 
+diff --git a/scripts/kconfig/lxdialog/menubox.c b/scripts/kconfig/lxdialog/menubox.c
+index 6e6244df0c56e3..52989d36c901c1 100644
+--- a/scripts/kconfig/lxdialog/menubox.c
++++ b/scripts/kconfig/lxdialog/menubox.c
+@@ -136,11 +136,11 @@ static void print_buttons(WINDOW * win, int height, int width, int selected)
+ 	int x = width / 2 - 28;
+ 	int y = height - 2;
+ 
+-	print_button(win, "Select", y, x, selected == 0);
+-	print_button(win, " Exit ", y, x + 12, selected == 1);
+-	print_button(win, " Help ", y, x + 24, selected == 2);
+-	print_button(win, " Save ", y, x + 36, selected == 3);
+-	print_button(win, " Load ", y, x + 48, selected == 4);
++	print_button(win, " 选择 ", y, x, selected == 0);
++	print_button(win, " 退出 ", y, x + 12, selected == 1);
++	print_button(win, " 帮助 ", y, x + 24, selected == 2);
++	print_button(win, " 保存 ", y, x + 36, selected == 3);
++	print_button(win, " 加载 ", y, x + 48, selected == 4);
+ 
+ 	wmove(win, y, x + 1 + 12 * selected);
+ 	wrefresh(win);
 diff --git a/scripts/kconfig/mconf.c b/scripts/kconfig/mconf.c
 index 84ea9215c0a7ee..fd1b48921f3d3a 100644
 --- a/scripts/kconfig/mconf.c
@@ -525,330 +551,3 @@ index 84ea9215c0a7ee..fd1b48921f3d3a 100644
  		return 1;
  	}
  
-
-From 9bac159c96983e32ad36d6bec5229bfad666b9c9 Mon Sep 17 00:00:00 2001
-From: =?UTF-8?q?=E9=99=88=E7=94=9F=E6=9D=82=E7=89=A9=E6=88=BF?=
- <88823709+TC999@users.noreply.github.com>
-Date: Tue, 11 Feb 2025 17:03:16 +0800
-Subject: [PATCH 2/4] Update menubox.c
-
----
- scripts/kconfig/lxdialog/menubox.c | 58 +++++++++++++++---------------
- 1 file changed, 29 insertions(+), 29 deletions(-)
-
-diff --git a/scripts/kconfig/lxdialog/menubox.c b/scripts/kconfig/lxdialog/menubox.c
-index 6e6244df0c56e3..1bd10095d9b533 100644
---- a/scripts/kconfig/lxdialog/menubox.c
-+++ b/scripts/kconfig/lxdialog/menubox.c
-@@ -13,14 +13,14 @@
-  *
-  *    *)  A bugfix for the Page-Down problem
-  *
-- *    *)  Formerly when I used Page Down and Page Up, the cursor would be set
-+ * *) Formerly when I used Page Down 和 Page Up, the cursor would be set
-  *        to the first position in the menu box.  Now lxdialog is a bit
-- *        smarter and works more like other menu systems (just have a look at
-+ * smarter 和 works more like other menu systems (just have a look at
-  *        it).
-  *
-  *    *)  Formerly if I selected something my scrolling would be broken because
-  *        lxdialog is re-invoked by the Menuconfig shell script, can't
-- *        remember the last scrolling position, and just sets it so that the
-+ * remember the last scrolling position, 和 just sets it so that the
-  *        cursor is at the bottom of the box.  Now it writes the temporary file
-  *        lxdialog.scrltmp which contains this information. The file is
-  *        deleted by lxdialog if the user leaves a submenu or enters a new
-@@ -30,17 +30,17 @@
-  *  [ 1998-06-14 ]
-  *
-  *    *)  Now lxdialog is crash-safe against broken "lxdialog.scrltmp" files
-- *        and menus change their size on the fly.
-+ * 和 menus change their size on the fly.
-  *
-  *    *)  If for some reason the last scrolling position is not saved by
-  *        lxdialog, it sets the scrolling so that the selected item is in the
-  *        middle of the menu box, not at the bottom.
-  *
-- * 02 January 1999, Michael Elizabeth Chastain (mec@shout.net)
-+ *1999年1月02日, Michael Elizabeth Chastain (mec@shout.net)
-  * Reset 'scroll' to 0 if the value from lxdialog.scrltmp is bogus.
-  * This fixes a bug in Menuconfig where using ' ' to descend into menus
-  * would leave mis-synchronized lxdialog.scrltmp files lying around,
-- * fscanf would read in 'scroll', and eventually that value would get used.
-+ * fscanf would read in 'scroll', 和 eventually that value would get used.
-  */
- 
- #include "dialog.h"
-@@ -61,14 +61,14 @@ static void do_print_item(WINDOW * win, const char *item, int line_y,
- 	j = first_alpha(menu_item, "YyNnMmHh");
- 
- 	/* Clear 'residue' of last item */
--	wattrset(win, dlg.menubox.atr);
-+	wattrset(win, dlg.menubox。atr);
- 	wmove(win, line_y, 0);
- 	wclrtoeol(win);
--	wattrset(win, selected ? dlg.item_selected.atr : dlg.item.atr);
-+	wattrset(win, selected ? dlg.item_selected。atr : dlg.item。atr);
- 	mvwaddstr(win, line_y, item_x, menu_item);
- 	if (hotkey) {
--		wattrset(win, selected ? dlg.tag_key_selected.atr
--			 : dlg.tag_key.atr);
-+		wattrset(win, selected ? dlg.tag_key_selected。atr
-+			 : dlg.tag_key。atr);
- 		mvwaddch(win, line_y, item_x + j, menu_item[j]);
- 	}
- 	if (selected) {
-@@ -97,11 +97,11 @@ static void print_arrows(WINDOW * win, int item_no, int scroll, int y, int x,
- 	wmove(win, y, x);
- 
- 	if (scroll > 0) {
--		wattrset(win, dlg.uarrow.atr);
-+		wattrset(win, dlg.uarrow。atr);
- 		waddch(win, ACS_UARROW);
- 		waddstr(win, "(-)");
- 	} else {
--		wattrset(win, dlg.menubox.atr);
-+		wattrset(win, dlg.menubox。atr);
- 		waddch(win, ACS_HLINE);
- 		waddch(win, ACS_HLINE);
- 		waddch(win, ACS_HLINE);
-@@ -113,11 +113,11 @@ static void print_arrows(WINDOW * win, int item_no, int scroll, int y, int x,
- 	wrefresh(win);
- 
- 	if ((height < item_no) && (scroll + height < item_no)) {
--		wattrset(win, dlg.darrow.atr);
-+		wattrset(win, dlg.darrow。atr);
- 		waddch(win, ACS_DARROW);
- 		waddstr(win, "(+)");
- 	} else {
--		wattrset(win, dlg.menubox_border.atr);
-+		wattrset(win, dlg.menubox_border。atr);
- 		waddch(win, ACS_HLINE);
- 		waddch(win, ACS_HLINE);
- 		waddch(win, ACS_HLINE);
-@@ -136,11 +136,11 @@ static void print_buttons(WINDOW * win, int height, int width, int selected)
- 	int x = width / 2 - 28;
- 	int y = height - 2;
- 
--	print_button(win, "Select", y, x, selected == 0);
--	print_button(win, " Exit ", y, x + 12, selected == 1);
--	print_button(win, " Help ", y, x + 24, selected == 2);
--	print_button(win, " Save ", y, x + 36, selected == 3);
--	print_button(win, " Load ", y, x + 48, selected == 4);
-+	print_button(win, " 选择 ", y, x, selected == 0);
-+	print_button(win, " 退出 ", y, x + 12, selected == 1);
-+	print_button(win, " 帮助 ", y, x + 24, selected == 2);
-+	print_button(win, " 保存 ", y, x + 36, selected == 3);
-+	print_button(win, " 加载 ", y, x + 48, selected == 4);
- 
- 	wmove(win, y, x + 1 + 12 * selected);
- 	wrefresh(win);
-@@ -190,20 +190,20 @@ int dialog_menu(const char *title, const char *prompt,
- 	dialog = newwin(height, width, y, x);
- 	keypad(dialog, TRUE);
- 
--	draw_box(dialog, 0, 0, height, width,
--		 dlg.dialog.atr, dlg.border.atr);
--	wattrset(dialog, dlg.border.atr);
--	mvwaddch(dialog, height - 3, 0, ACS_LTEE);
-+	draw_box(dialog, 0， 0, height, width,
-+		 dlg.dialog。atr, dlg.border。atr);
-+	wattrset(dialog, dlg.border。atr);
-+	mvwaddch(dialog, height - 3， 0, ACS_LTEE);
- 	for (i = 0; i < width - 2; i++)
- 		waddch(dialog, ACS_HLINE);
--	wattrset(dialog, dlg.dialog.atr);
--	wbkgdset(dialog, dlg.dialog.atr & A_COLOR);
-+	wattrset(dialog, dlg.dialog。atr);
-+	wbkgdset(dialog, dlg.dialog。atr & A_COLOR);
- 	waddch(dialog, ACS_RTEE);
- 
- 	print_title(dialog, title, width);
- 
--	wattrset(dialog, dlg.dialog.atr);
--	print_autowrap(dialog, prompt, width - 2, 1, 3);
-+	wattrset(dialog, dlg.dialog。atr);
-+	print_autowrap(dialog, prompt, width - 2， 1， 3);
- 
- 	menu_width = width - 6;
- 	box_y = height - menu_height - 5;
-@@ -215,8 +215,8 @@ int dialog_menu(const char *title, const char *prompt,
- 	keypad(menu, TRUE);
- 
- 	/* draw a box around the menu items */
--	draw_box(dialog, box_y, box_x, menu_height + 2, menu_width + 2,
--		 dlg.menubox_border.atr, dlg.menubox.atr);
-+	draw_box(dialog, box_y, box_x, menu_height + 2, menu_width + 2，
-+		 dlg.menubox_border。atr, dlg.menubox。atr);
- 
- 	if (menu_width >= 80)
- 		item_x = (menu_width - 70) / 2;
-
-From f3e71200938928b7de7ed54403ee66a543439f22 Mon Sep 17 00:00:00 2001
-From: =?UTF-8?q?=E9=99=88=E7=94=9F=E6=9D=82=E7=89=A9=E6=88=BF?=
- <88823709+TC999@users.noreply.github.com>
-Date: Tue, 11 Feb 2025 17:07:33 +0800
-Subject: [PATCH 3/4] Update menubox.c
-
----
- scripts/kconfig/lxdialog/menubox.c | 36 +++++++++++++++---------------
- 1 file changed, 18 insertions(+), 18 deletions(-)
-
-diff --git a/scripts/kconfig/lxdialog/menubox.c b/scripts/kconfig/lxdialog/menubox.c
-index 1bd10095d9b533..13a4648f506a31 100644
---- a/scripts/kconfig/lxdialog/menubox.c
-+++ b/scripts/kconfig/lxdialog/menubox.c
-@@ -13,9 +13,9 @@
-  *
-  *    *)  A bugfix for the Page-Down problem
-  *
-- * *) Formerly when I used Page Down 和 Page Up, the cursor would be set
-+ * *) Formerly when I used Page Down and Page Up, the cursor would be set
-  *        to the first position in the menu box.  Now lxdialog is a bit
-- * smarter 和 works more like other menu systems (just have a look at
-+ * smarter and works more like other menu systems (just have a look at
-  *        it).
-  *
-  *    *)  Formerly if I selected something my scrolling would be broken because
-@@ -30,13 +30,13 @@
-  *  [ 1998-06-14 ]
-  *
-  *    *)  Now lxdialog is crash-safe against broken "lxdialog.scrltmp" files
-- * 和 menus change their size on the fly.
-+ * and menus change their size on the fly.
-  *
-  *    *)  If for some reason the last scrolling position is not saved by
-  *        lxdialog, it sets the scrolling so that the selected item is in the
-  *        middle of the menu box, not at the bottom.
-  *
-- *1999年1月02日, Michael Elizabeth Chastain (mec@shout.net)
-+ * 1999年1月02日, Michael Elizabeth Chastain (mec@shout.net)
-  * Reset 'scroll' to 0 if the value from lxdialog.scrltmp is bogus.
-  * This fixes a bug in Menuconfig where using ' ' to descend into menus
-  * would leave mis-synchronized lxdialog.scrltmp files lying around,
-@@ -61,14 +61,14 @@ static void do_print_item(WINDOW * win, const char *item, int line_y,
- 	j = first_alpha(menu_item, "YyNnMmHh");
- 
- 	/* Clear 'residue' of last item */
--	wattrset(win, dlg.menubox。atr);
-+	wattrset(win, dlg.menubox.atr);
- 	wmove(win, line_y, 0);
- 	wclrtoeol(win);
--	wattrset(win, selected ? dlg.item_selected。atr : dlg.item。atr);
-+	wattrset(win, selected ? dlg.item_selected.atr : dlg.item.atr);
- 	mvwaddstr(win, line_y, item_x, menu_item);
- 	if (hotkey) {
--		wattrset(win, selected ? dlg.tag_key_selected。atr
--			 : dlg.tag_key。atr);
-+		wattrset(win, selected ? dlg.tag_key_selected.atr
-+			 : dlg.tag_key.atr);
- 		mvwaddch(win, line_y, item_x + j, menu_item[j]);
- 	}
- 	if (selected) {
-@@ -97,11 +97,11 @@ static void print_arrows(WINDOW * win, int item_no, int scroll, int y, int x,
- 	wmove(win, y, x);
- 
- 	if (scroll > 0) {
--		wattrset(win, dlg.uarrow。atr);
-+		wattrset(win, dlg.uarrow.atr);
- 		waddch(win, ACS_UARROW);
- 		waddstr(win, "(-)");
- 	} else {
--		wattrset(win, dlg.menubox。atr);
-+		wattrset(win, dlg.menubox.atr);
- 		waddch(win, ACS_HLINE);
- 		waddch(win, ACS_HLINE);
- 		waddch(win, ACS_HLINE);
-@@ -113,11 +113,11 @@ static void print_arrows(WINDOW * win, int item_no, int scroll, int y, int x,
- 	wrefresh(win);
- 
- 	if ((height < item_no) && (scroll + height < item_no)) {
--		wattrset(win, dlg.darrow。atr);
-+		wattrset(win, dlg.darrow.atr);
- 		waddch(win, ACS_DARROW);
- 		waddstr(win, "(+)");
- 	} else {
--		wattrset(win, dlg.menubox_border。atr);
-+		wattrset(win, dlg.menubox_border.atr);
- 		waddch(win, ACS_HLINE);
- 		waddch(win, ACS_HLINE);
- 		waddch(win, ACS_HLINE);
-@@ -191,18 +191,18 @@ int dialog_menu(const char *title, const char *prompt,
- 	keypad(dialog, TRUE);
- 
- 	draw_box(dialog, 0， 0, height, width,
--		 dlg.dialog。atr, dlg.border。atr);
--	wattrset(dialog, dlg.border。atr);
-+		 dlg.dialog.atr, dlg.border.atr);
-+	wattrset(dialog, dlg.border.atr);
- 	mvwaddch(dialog, height - 3， 0, ACS_LTEE);
- 	for (i = 0; i < width - 2; i++)
- 		waddch(dialog, ACS_HLINE);
--	wattrset(dialog, dlg.dialog。atr);
--	wbkgdset(dialog, dlg.dialog。atr & A_COLOR);
-+	wattrset(dialog, dlg.dialog.atr);
-+	wbkgdset(dialog, dlg.dialog.atr & A_COLOR);
- 	waddch(dialog, ACS_RTEE);
- 
- 	print_title(dialog, title, width);
- 
--	wattrset(dialog, dlg.dialog。atr);
-+	wattrset(dialog, dlg.dialog.atr);
- 	print_autowrap(dialog, prompt, width - 2， 1， 3);
- 
- 	menu_width = width - 6;
-@@ -216,7 +216,7 @@ int dialog_menu(const char *title, const char *prompt,
- 
- 	/* draw a box around the menu items */
- 	draw_box(dialog, box_y, box_x, menu_height + 2, menu_width + 2，
--		 dlg.menubox_border。atr, dlg.menubox。atr);
-+		 dlg.menubox_border.atr, dlg.menubox.atr);
- 
- 	if (menu_width >= 80)
- 		item_x = (menu_width - 70) / 2;
-
-From daa7c529c28f119ebc3487963d4080b8f1811db2 Mon Sep 17 00:00:00 2001
-From: =?UTF-8?q?=E9=99=88=E7=94=9F=E6=9D=82=E7=89=A9=E6=88=BF?=
- <88823709+TC999@users.noreply.github.com>
-Date: Tue, 11 Feb 2025 17:08:50 +0800
-Subject: [PATCH 4/4] Update menubox.c
-
----
- scripts/kconfig/lxdialog/menubox.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/scripts/kconfig/lxdialog/menubox.c b/scripts/kconfig/lxdialog/menubox.c
-index 13a4648f506a31..282a702c869d28 100644
---- a/scripts/kconfig/lxdialog/menubox.c
-+++ b/scripts/kconfig/lxdialog/menubox.c
-@@ -190,10 +190,10 @@ int dialog_menu(const char *title, const char *prompt,
- 	dialog = newwin(height, width, y, x);
- 	keypad(dialog, TRUE);
- 
--	draw_box(dialog, 0， 0, height, width,
-+	draw_box(dialog, 0, 0, height, width,
- 		 dlg.dialog.atr, dlg.border.atr);
- 	wattrset(dialog, dlg.border.atr);
--	mvwaddch(dialog, height - 3， 0, ACS_LTEE);
-+	mvwaddch(dialog, height - 3, 0, ACS_LTEE);
- 	for (i = 0; i < width - 2; i++)
- 		waddch(dialog, ACS_HLINE);
- 	wattrset(dialog, dlg.dialog.atr);
-@@ -203,7 +203,7 @@ int dialog_menu(const char *title, const char *prompt,
- 	print_title(dialog, title, width);
- 
- 	wattrset(dialog, dlg.dialog.atr);
--	print_autowrap(dialog, prompt, width - 2， 1， 3);
-+	print_autowrap(dialog, prompt, width - 2, 1, 3);
- 
- 	menu_width = width - 6;
- 	box_y = height - menu_height - 5;
-@@ -215,7 +215,7 @@ int dialog_menu(const char *title, const char *prompt,
- 	keypad(menu, TRUE);
- 
- 	/* draw a box around the menu items */
--	draw_box(dialog, box_y, box_x, menu_height + 2, menu_width + 2，
-+	draw_box(dialog, box_y, box_x, menu_height + 2, menu_width + 2,
- 		 dlg.menubox_border.atr, dlg.menubox.atr);
- 
- 	if (menu_width >= 80)
